@@ -39,7 +39,7 @@ Imagine having a smart assistant that has read all your documents and can answer
 ## 🚀 Key Features
 
 ### 🎯 Core Capabilities
-- **Document Upload**: Upload PDF or text files easily
+- **Document Upload**: Upload PDF files
 - **Smart Q&A**: Ask questions in natural language
 - **RAG Technology**: Uses Retrieval-Augmented Generation for accurate answers
 - **Source Tracking**: See which document excerpts were used for each answer
@@ -69,7 +69,7 @@ Imagine having a smart assistant that has read all your documents and can answer
 ### The Magic Behind the Scenes
 
 1. **Upload & Process**
-   - You upload a PDF or text file
+   - You upload a PDF 
    - The system extracts all text from your document
    - Text is split into smaller, manageable chunks
    - Each chunk is converted into a mathematical representation (embedding)
