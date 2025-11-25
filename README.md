@@ -397,4 +397,3 @@ Having issues? Check the troubleshooting section above, or:
 
 ---
 
-**Created by malberyz7**
