@@ -6,6 +6,16 @@ A powerful AI-powered chatbot that answers questions about your uploaded documen
 
 ---
 
+## 🎥 Project Video Tutorial
+
+**Watch the complete tutorial video to get started:**
+
+[![Project Video Tutorial](https://img.shields.io/badge/YouTube-Watch%20Tutorial-red?style=for-the-badge&logo=youtube)](https://youtu.be/hxlhhFyvx3U)
+
+**Direct Link:** [https://youtu.be/hxlhhFyvx3U](https://youtu.be/hxlhhFyvx3U)
+
+---
+
 ## ✨ What Does This Project Do?
 
 Imagine having a smart assistant that has read all your documents and can answer any question about them instantly. That's exactly what this project does!

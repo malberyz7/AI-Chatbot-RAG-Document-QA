@@ -142,11 +142,35 @@ function showStatus(message, type) {
 
 async function checkDatabaseStatus() {
     try {
-        const response = await fetch(`${API_BASE_URL}/status`);
-        const data = await response.json();
+        // Try to get file count for clearer message
+        try {
+            const filesResponse = await fetch(`${API_BASE_URL}/files`);
+            if (filesResponse.ok) {
+                const filesData = await filesResponse.json();
+                const fileCount = filesData.total_files || 0;
+                
+                if (fileCount > 0) {
+                    if (fileCount === 1) {
+                        documentsInfo.textContent = `✓ 1 file uploaded. You can now ask questions!`;
+                    } else {
+                        documentsInfo.textContent = `✓ ${fileCount} files uploaded. You can now ask questions!`;
+                    }
+                    documentsInfo.classList.add('show');
+                } else {
+                    documentsInfo.classList.remove('show');
+                }
+                return;
+            }
+        } catch (e) {
+            // Files endpoint not available (paid version), use status only
+        }
         
-        if (data.documents_in_db > 0) {
-            documentsInfo.textContent = `✓ ${data.documents_in_db} document chunk(s) in database. You can now ask questions!`;
+        // Fallback for paid version or if files endpoint fails
+        const statusResponse = await fetch(`${API_BASE_URL}/status`);
+        const statusData = await statusResponse.json();
+        
+        if (statusData.documents_in_db > 0) {
+            documentsInfo.textContent = `✓ Documents ready. You can now ask questions!`;
             documentsInfo.classList.add('show');
         } else {
             documentsInfo.classList.remove('show');
@@ -281,16 +305,26 @@ async function loadUploadedFiles() {
         if (filesList) {
             filesList.innerHTML = '';
             
+            // Remove duplicates by filename (in case of any bug)
+            const uniqueFiles = [];
+            const seenFilenames = new Set();
+            
             data.files.forEach(file => {
+                if (!seenFilenames.has(file.filename)) {
+                    seenFilenames.add(file.filename);
+                    uniqueFiles.push(file);
+                }
+            });
+            
+            uniqueFiles.forEach(file => {
                 const fileItem = document.createElement('div');
                 fileItem.className = 'file-item';
                 fileItem.innerHTML = `
                     <div class="file-info">
                         <span class="file-icon">📄</span>
                         <span class="file-name">${escapeHtml(file.filename)}</span>
-                        <span class="file-chunks">${file.chunks} chunk(s)</span>
                     </div>
-                    <button class="btn-delete" onclick="deleteFile('${escapeHtml(file.filename)}')" title="Delete file">
+                    <button class="btn-delete" onclick="deleteFile('${escapeHtml(file.filename)}')" title="Delete this file">
                         🗑️
                     </button>
                 `;
