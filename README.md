@@ -378,7 +378,7 @@ Having issues? Check the troubleshooting section above, or:
 - Review the API docs at `/docs` when server is running
 - Check server logs for error messages
 - Make sure all dependencies are installed correctly
-
+- Discord : malberyy
 ---
 
 **Ready to get started?** Run `./start_free.sh` and open `http://localhost:8000/` in your browser! 🚀
