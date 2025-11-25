@@ -49,5 +49,5 @@ echo ""
 
 # Start the server
 cd backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+../venv/bin/python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 

@@ -384,3 +384,7 @@ Having issues? Check the troubleshooting section above, or:
 **Ready to get started?** Run `./start_free.sh` and open `http://localhost:8000/` in your browser! 🚀
 
 **Happy Document Chatting!** 📚💬🤖
+
+---
+
+**Created by malberyz7**

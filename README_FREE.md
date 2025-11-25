@@ -197,3 +197,5 @@ lsof -ti:8000 | xargs kill
 
 **Enjoy your FREE AI Chatbot! 🎉**
 
+**Created by malberyz7**
+

@@ -256,37 +256,58 @@ loadUploadedFiles();
 async function loadUploadedFiles() {
     try {
         const response = await fetch(`${API_BASE_URL}/files`);
+        
+        // If endpoint doesn't exist (paid version), hide file management section
+        if (response.status === 404) {
+            const filesSection = document.getElementById('uploadedFilesSection');
+            if (filesSection) {
+                filesSection.style.display = 'none';
+            }
+            return;
+        }
+        
         const data = await response.json();
         
         const filesList = document.getElementById('uploadedFilesList');
         const filesSection = document.getElementById('uploadedFilesSection');
         
         if (!response.ok || !data.files || data.files.length === 0) {
-            filesList.innerHTML = '<p class="no-files">No files uploaded yet.</p>';
+            if (filesList) {
+                filesList.innerHTML = '<p class="no-files">No files uploaded yet.</p>';
+            }
             return;
         }
         
-        filesList.innerHTML = '';
+        if (filesList) {
+            filesList.innerHTML = '';
+            
+            data.files.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <span class="file-icon">📄</span>
+                        <span class="file-name">${escapeHtml(file.filename)}</span>
+                        <span class="file-chunks">${file.chunks} chunk(s)</span>
+                    </div>
+                    <button class="btn-delete" onclick="deleteFile('${escapeHtml(file.filename)}')" title="Delete file">
+                        🗑️
+                    </button>
+                `;
+                filesList.appendChild(fileItem);
+            });
+        }
         
-        data.files.forEach(file => {
-            const fileItem = document.createElement('div');
-            fileItem.className = 'file-item';
-            fileItem.innerHTML = `
-                <div class="file-info">
-                    <span class="file-icon">📄</span>
-                    <span class="file-name">${escapeHtml(file.filename)}</span>
-                    <span class="file-chunks">${file.chunks} chunk(s)</span>
-                </div>
-                <button class="btn-delete" onclick="deleteFile('${escapeHtml(file.filename)}')" title="Delete file">
-                    🗑️
-                </button>
-            `;
-            filesList.appendChild(fileItem);
-        });
-        
-        filesSection.style.display = 'block';
+        if (filesSection) {
+            filesSection.style.display = 'block';
+        }
     } catch (error) {
-        console.error('Error loading files:', error);
+        // Silently handle errors - file management is optional (only in free version)
+        console.log('File management not available (this is normal for paid version)');
+        const filesSection = document.getElementById('uploadedFilesSection');
+        if (filesSection) {
+            filesSection.style.display = 'none';
+        }
     }
 }
 
@@ -300,6 +321,12 @@ async function deleteFile(filename) {
         const response = await fetch(`${API_BASE_URL}/files/${encodeURIComponent(filename)}`, {
             method: 'DELETE'
         });
+        
+        // If endpoint doesn't exist (paid version), show helpful message
+        if (response.status === 404) {
+            showStatus('File management is only available in the free version. Use /clear endpoint to clear all documents.', 'error');
+            return;
+        }
         
         const data = await response.json();
         
